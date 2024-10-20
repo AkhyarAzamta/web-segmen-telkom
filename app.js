@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isNaN(lat) && !isNaN(lng) && description) {
       const newWaypoint = { lat, lng, description };
-      selectedRoute.waypoints.push(newWaypoint);
+      selectedRoute.titikRawan.push(newWaypoint);
       updateMapWithRoute(selectedRoute);
     } else {
       alert("Input tidak valid. Pastikan untuk memasukkan koordinat dalam format yang benar dan deskripsi.");
@@ -61,7 +61,7 @@ function updateMapWithRoute(route) {
   routingControl = L.Routing.control({
     waypoints: [
       L.latLng(route.org_latLng.lat, route.org_latLng.lng),
-      ...route.waypoints.map(wp => L.latLng(wp.lat, wp.lng)),
+      ...route.titikRawan.map(wp => L.latLng(wp.lat, wp.lng)),
       L.latLng(route.dst_latLng.lat, route.dst_latLng.lng)
     ],
     routeWhileDragging: true,
@@ -72,7 +72,7 @@ function updateMapWithRoute(route) {
   L.marker([route.org_latLng.lat, route.org_latLng.lng]).addTo(map).bindPopup(route.org_latLng.org_site);
   L.marker([route.dst_latLng.lat, route.dst_latLng.lng]).addTo(map).bindPopup(route.dst_latLng.dst_site);
 
-  route.waypoints.forEach(({ lat, lng, description }) => {
+  route.titikRawan.forEach(({ lat, lng, description }) => {
     L.marker([lat, lng]).addTo(map).bindPopup(`Description: ${description}`);
   });
 }
