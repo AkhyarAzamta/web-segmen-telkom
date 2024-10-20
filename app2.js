@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   L.control.watermark = function (opts) {
     return new L.Control.Watermark(opts);
-  };
+  }
 
   L.control.watermark({ position: 'topright' }).addTo(map);
 
@@ -72,16 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateMapWithRoute(route) {
-  // Hapus routing control sebelumnya, jika ada
   if (routingControl) {
     map.removeControl(routingControl);
   }
 
-  // Hapus semua marker dari rute sebelumnya
-  markers.forEach(marker => map.removeLayer(marker));
-  markers = [];  // Kosongkan array marker setelah dihapus
+    // Hapus semua marker dari rute sebelumnya
+    markers.forEach(marker => map.removeLayer(marker));
+    // markers = [];  // Kosongkan array marker setelah dihapus
 
-  // Buat routing control baru untuk rute yang dipilih
   routingControl = L.Routing.control({
     waypoints: [
       L.latLng(route.org_latLng.lat, route.org_latLng.lng),
@@ -92,15 +90,49 @@ function updateMapWithRoute(route) {
     show: false
   }).addTo(map);
 
-  // Tambahkan marker untuk start, end, dan waypoints, lalu simpan di array markers
-  const startMarker = L.marker([route.org_latLng.lat, route.org_latLng.lng]).addTo(map).bindPopup(route.org_latLng.org_site);
-  markers.push(startMarker);
+  // Tambah marker untuk start, end, dan waypoint dengan popup yang memiliki tombol
+  const orgMarker = L.marker([route.org_latLng.lat, route.org_latLng.lng]).addTo(map)
+    .bindPopup(`
+      <div>
+        <strong>${route.org_latLng.org_site}</strong><br>
+        <button id="openOrgLatLng">Buka Google Maps</button>
+      </div>
+    `);
+    markers.push(orgMarker);
 
-  const endMarker = L.marker([route.dst_latLng.lat, route.dst_latLng.lng]).addTo(map).bindPopup(route.dst_latLng.dst_site);
-  markers.push(endMarker);
+  const dstMarker = L.marker([route.dst_latLng.lat, route.dst_latLng.lng]).addTo(map)
+    .bindPopup(`
+      <div>
+        <strong>${route.dst_latLng.dst_site}</strong><br>
+        <button id="openDstLatLng">Buka Google Maps</button>
+      </div>
+    `);
+    markers.push(dstMarker);
 
+  // Event listener setelah popup terbuka
+  orgMarker.on('popupopen', () => {
+    document.getElementById('openOrgLatLng').addEventListener('click', () => {
+      if (confirm('Apakah Anda ingin membuka rute di Google Maps?')) {
+        const googleMapsLink = `https://www.google.com/maps/dir/?api=1&origin=${route.org_latLng.lat},${route.org_latLng.lng}&destination=${route.dst_latLng.lat},${route.dst_latLng.lng}`;
+        window.open(googleMapsLink, '_blank');
+      }
+    });
+  });
+
+  dstMarker.on('popupopen', () => {
+    document.getElementById('openDstLatLng').addEventListener('click', () => {
+      if (confirm('Apakah Anda ingin membuka rute di Google Maps?')) {
+        const googleMapsLink = `https://www.google.com/maps/dir/?api=1&origin=${route.org_latLng.lat},${route.org_latLng.lng}&destination=${route.dst_latLng.lat},${route.dst_latLng.lng}`;
+        window.open(googleMapsLink, '_blank');
+      }
+    });
+  });
+
+  // Tambahkan marker untuk titik rawan
   route.titikRawan.forEach(({ lat, lng, description }) => {
     const waypointMarker = L.marker([lat, lng]).addTo(map).bindPopup(`Description: ${description}`);
     markers.push(waypointMarker);
   });
 }
+
+
