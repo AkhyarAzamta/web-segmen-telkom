@@ -20,32 +20,50 @@
     .controls {
         margin-left: 5%;
         margin-top: 1rem;
+        gap: 1rem;
         display: flex;
         position: absolute;
         z-index: 1000;
     }
-    #addWaypointButton {
+    #addKoordinat, #addWaypointButton, #resetPolyline {
         width: 8rem;
         height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #007BFF;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: medium;
+        font-weight: bold;
+    }
+    #addKoordinat {
+        background-color: green;
+    }
+    #addWaypointButton {
+        background-color: orange;
+    }
+    #resetPolyline {
+        background-color: red;
     }
     #map {
         height: 95vh;
         background-color: #e9ecef;
+        cursor: pointer;
     }
 </style>
 
 <body>
     <!-- Controls -->
     <div class="controls">
-        <select id="routeSelector">
-            <option value="">Pilih Segment</option>
-        </select>
+        <button id="addKoordinat">Add Koordinat</button>
         <button id="addWaypointButton">Copy Polyline</button>
+        <button id="resetPolyline">Reset Polyline</button>
     </div>
     <!--  -->
     <div id="map"></div>
     <script src="data.js"></script>
-    <script src="app3.js"></script>
+    <script src="polyline.js"></script>
 </body>
 
 </html>
