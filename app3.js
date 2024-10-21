@@ -1,3 +1,4 @@
+// Kode yang sudah ada...
 let map;
 let markers = [];  // Array untuk menyimpan marker
 let polylines = []; // Array untuk menyimpan garis rute
@@ -5,31 +6,19 @@ let routes = window.data; // Ambil data dari data.js
 let selectedRoute = null;
 let clickedCoords = []; // Array untuk menyimpan koordinat hasil klik
 
-document.addEventListener('DOMContentLoaded', () => {
+// Definisikan custom icon
+var yellowIcon = L.icon({
+    iconUrl: 'http://maps.google.com/mapfiles/ms/icons/yellow.png',
+    iconSize: [40, 40],  // Ukuran icon
+});
 
+document.addEventListener('DOMContentLoaded', () => {
   // Inisialisasi peta
   map = L.map('map').setView([-6.914744, 107.609810], 10);
-
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-  // Watermark logo Indihome
-  L.Control.Watermark = L.Control.extend({
-    onAdd: function (map) {
-      var img = L.DomUtil.create('img');
-      img.src = 'https://www.telkom.co.id/images/logo_horizontal.svg';
-      img.style.width = '150px';  // Adjusted size for mobile
-      return img;
-    },
-    onRemove: function (map) {
-      // Nothing to do here
-    }
-  });
+  document.getElementById('map').style.cursor = 'pointer'; // Menambahkan cursor: pointer
 
-  L.control.watermark = function (opts) {
-    return new L.Control.Watermark(opts);
-  };
-
-  L.control.watermark({ position: 'topright' }).addTo(map);
 
   // Tambahkan opsi rute ke dropdown
   const routeSelector = document.getElementById('routeSelector');
@@ -54,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('click', (e) => {
     const { lat, lng } = e.latlng; // Ambil latitude dan longitude dari klik
 
-    // Tambahkan marker di lokasi yang diklik
-    const newMarker = L.marker([lat, lng]).addTo(map);
+    // Tambahkan marker di lokasi yang diklik dengan custom icon
+    const newMarker = L.marker([lat, lng], { icon: yellowIcon }).addTo(map); // Menggunakan icon kuning
     markers.push(newMarker);
 
     // Simpan koordinat yang diklik ke dalam array
@@ -64,44 +53,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gambarkan polyline berdasarkan titik yang diklik
     drawPolyline();
 
+    // Tambahkan event listener untuk menghapus marker saat diklik
+    newMarker.on('click', function() {
+      map.removeLayer(newMarker);
+      markers = markers.filter(marker => marker !== newMarker); // Hapus dari array markers
+      clickedCoords = clickedCoords.filter(coord => coord[0] !== lat || coord[1] !== lng); // Hapus dari clickedCoords
+      drawPolyline(); // Gambar ulang polyline
+    });
+
     // Debugging untuk menampilkan koordinat di konsol
     console.log('Koordinat yang diklik:', clickedCoords);
   });
 
-  // Event listener untuk menambah waypoint
+  // Ganti event listener untuk menyalin waypoint ke clipboard
   document.getElementById('addWaypointButton').addEventListener('click', () => {
-    if (!selectedRoute) {
-      alert('Pilih rute terlebih dahulu');
-      return;
+    if (clickedCoords.length === 0) {
+        alert('Belum ada rute yang ditambahkan.');
+        return;
     }
 
-    const latLngInput = prompt("Masukkan Latitude dan Longitude dipisahkan dengan koma(,)");
-    const description = prompt("Masukkan Deskripsi untuk lokasi baru:");
+    // Buat format string manual
+    const formattedData = `[\n` + 
+        clickedCoords.map(coord => `                [${coord[0]},${coord[1]}],`).join('\n') + 
+        `\n]`;
 
-    const [lat, lng] = latLngInput.split(',').map(coord => parseFloat(coord.trim()));
-
-    if (!isNaN(lat) && !isNaN(lng) && description) {
-      const newWaypoint = { lat, lng, description };
-      selectedRoute.titikRawan.push(newWaypoint);
-      updateMapWithRoute(selectedRoute);
-    } else {
-      alert("Input tidak valid. Pastikan untuk memasukkan koordinat dalam format yang benar dan deskripsi.");
-    }
-  });
+    navigator.clipboard.writeText(formattedData).then(() => {
+        alert('Polyline berhasil disalin ke clipboard:\n' + formattedData);
+    }).catch(err => {
+        console.error('Gagal menyalin: ', err);
+    });
 });
 
+
+
+});
+
+// Fungsi lainnya tetap sama...
 function updateMapWithRoute(route) {
   // Hapus semua marker dan garis (polylines) dari rute sebelumnya
-  markers.forEach(marker => map.removeLayer(marker));
-  markers = [];  // Kosongkan array marker setelah dihapus
+  markers.forEach(marker => {
+    if (!marker.isStart && !marker.isEnd) {
+      map.removeLayer(marker);
+    }
+  });
+
   polylines.forEach(polyline => map.removeLayer(polyline));
   polylines = []; // Kosongkan array garis rute setelah dihapus
 
-  // Tambahkan marker untuk start dan end
+  // Tambahkan marker untuk start dan end dengan icon default
   const startMarker = L.marker([route.org_latLng.lat, route.org_latLng.lng]).addTo(map).bindPopup(route.org_latLng.org_site);
+  startMarker.isStart = true; // Tandai sebagai marker awal
   markers.push(startMarker);
 
   const endMarker = L.marker([route.dst_latLng.lat, route.dst_latLng.lng]).addTo(map).bindPopup(route.dst_latLng.dst_site);
+  endMarker.isEnd = true; // Tandai sebagai marker akhir
   markers.push(endMarker);
 
   // Gambarkan garis rute dari start ke titik rawan dan ke end
@@ -117,18 +122,16 @@ function updateMapWithRoute(route) {
   map.fitBounds(polyline.getBounds());
 }
 
-
 function drawPolyline() {
   // Hapus polyline lama jika ada
-  polylines.forEach(polyline => map.removeLayer(polyline));
-  polylines = [];
-
+  // Hanya hapus polyline merah, bukan semua polylines
+  const redPolylines = polylines.filter(polyline => polyline.options.color === 'red');
+  redPolylines.forEach(polyline => map.removeLayer(polyline));
+  
   // Tambahkan polyline baru berdasarkan koordinat yang telah diklik
-  const newPolyline = L.polyline(clickedCoords, { color: 'red' }).addTo(map);
-  polylines.push(newPolyline);
-
-  // Zoom agar mencakup semua titik
-  if (clickedCoords.length > 1) {
-    map.fitBounds(newPolyline.getBounds());
+  if (clickedCoords.length > 0) {
+      const newPolyline = L.polyline(clickedCoords, { color: 'red' }).addTo(map);
+      polylines.push(newPolyline);
   }
 }
+

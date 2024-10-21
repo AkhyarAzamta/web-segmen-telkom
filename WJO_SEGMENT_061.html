@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBS</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+
+  <style>
+    body {
+      font-size: 12px;
+      /* Mengubah ukuran font secara global */
+    }
+
+    /* Fixed header */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1030;
+    }
+
+    /* Left sidebar height adjust */
+    .sidebar {
+      position: fixed;
+      top: 56px;
+      /* Height of navbar */
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      z-index: 100;
+      padding-top: 20px;
+      background-color: #f8f9fa;
+      overflow-y: auto;
+    }
+
+    /* Main content area */
+    .content {
+      margin-top: 56px;
+      /* Offset for the fixed header */
+      /*            margin-left: 5%; /* Offset for the sidebar */
+      padding: 20px;
+    }
+
+    /* Map height */
+    #map {
+      height: 300px;
+      background-color: #e9ecef;
+      /* Placeholder background */
+    }
+
+
+    img.leaflet-marker-icon {
+      width: 40px !important;
+      /* Larger icons for touch screens */
+      height: 40px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Fixed Header -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand">Peta Jaringan</a>
+    </div>
+  </nav>
+
+  <!-- Left Sidebar Menu -->
+
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="row">
+      <!-- First content block for map (locked section) -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Peta Rute</h5>
+            <div id="map">
+              <!-- Placeholder for Map -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Keterangan Peta</h5>
+            <div id="map">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Jenis</th>
+                    <th>Jumlah</th>
+                    <th>Open</th>
+                    <th>Verified</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Crossing</td>
+                    <td>16</td>
+                    <td>12</td>
+                    <td>4</td>
+
+                  </tr>
+                  <tr>
+                    <td>Warga</td>
+                    <td>4</td>
+                    <td>3</td>
+                    <td>1</td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+
+      <!-- Second content block for table -->
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Data Titik Rawan</h5>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Koord</th>
+                  <th>Jenis</th>
+                  <th>Prior</th>
+                  <th>Jarak</th>
+                  <th>Desain QE</th>
+                  <th>Usulan</th>
+                  <th>Progres</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>John Doe</td>
+                  <td>25</td>
+                  <td>25</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Jane Smith</td>
+                  <td>30</td>
+                  <td>30</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+
+                </tr>
+                <tr>
+                  <td>43</td>
+                  <td>Mike Johnson</td>
+                  <td>12</td>
+                  <td>65</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>John Doe</td>
+                  <td>25</td>
+                  <td>New York</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Jane Smith</td>
+                  <td>30</td>
+                  <td>30</td>
+                  <td>Los Angeles</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Mike Johnson</td>
+                  <td>35</td>
+                  <td>Chicago</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bg-info text-white text-center py-3">
+    <div class="container">
+      <p>&copy; TELKOM AKSES Bandung Barat & Sukabumi.</p>
+      <p>Contact us at: <a href="mailto:info@mywebsite.com" class="text-white">info@mywebsite.com</a></p>
+    </div>
+  </footer>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Creating map options
+    var mapOptions = {
+      center: [-6.656108, 106.847114], // Masohi
+      zoom: 12
+    };
+
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // Watermark logo Indihome
+    L.Control.Watermark = L.Control.extend({
+      onAdd: function (map) {
+        var img = L.DomUtil.create('img');
+        img.src = 'https://www.telkom.co.id/images/logo_horizontal.svg';
+        img.style.width = '150px';  // Adjusted size for mobile
+        return img;
+      },
+      onRemove: function (map) {
+        // Nothing to do here
+      }
+    });
+
+    L.control.watermark = function (opts) {
+      return new L.Control.Watermark(opts);
+    }
+
+    L.control.watermark({ position: 'topright' }).addTo(map);
+
+    // Icon definitions
+    var kantor = L.icon({
+      iconUrl: 'http://maps.google.com/mapfiles/ms/icons/rangerstation.png',
+      iconSize: [40, 40],  // Adjust icon size for mobile
+    });
+    //--- titik rawan warna merah//
+    var red = L.icon({
+      iconUrl: 'http://maps.google.com/mapfiles/ms/icons/yellow.png',
+      iconSize: [40, 40],  // Adjust icon size for mobile
+      iconAnchor: [20, 40], // Titik anchor (x, y), [lebar / 2, tinggi]            
+
+    });
+
+    //--- titik rawan warna merah//
+    var yellow = L.icon({
+      iconUrl: 'http://maps.google.com/mapfiles/ms/icons/yellow.png',
+      iconSize: [40, 40],  // Adjust icon size for mobile
+    });
+
+
+
+    // ODP Marker Data
+    var odp_merah = [
+      ["ODP-MSH-FAC/1", -6.656082419085364, 106.8471211194992, "<p>Titik Rawan"],
+      ["ODP-MSH-FAC/2", -6.777620894075589, 106.7871791124344, "<p>Titik Rawan"]
+    ];
+
+
+    // Add ODP markers to map
+    for (var i = 0; i < odp_merah.length; i++) {
+      var marker = new L.marker([odp_merah[i][1], odp_merah[i][2]], { icon: red })
+        .bindPopup(odp_merah[i][0] + odp_merah[i][3])
+        .addTo(map);
+    }
+
+
+    const polyline = L.polyline([
+      [-6.6559865103832525, 106.84701919555665],
+      [-6.657915337347192, 106.84606432914735],
+      [-6.660004003301819, 106.84523820877077],
+      [-6.6611975227129845, 106.84490561485292],
+      [-6.662423008372829, 106.84494853019716],
+      [-6.6642878719804495, 106.84542059898378],
+      [-6.66631257301026, 106.84592485427858],
+      [-6.668038890441709, 106.84638619422914],
+      [-6.67050048070589, 106.84686899185182],
+      [-6.673931767709327, 106.8474590778351],
+      [-6.677245814007325, 106.84834957122803],
+      [-6.679643421937173, 106.84869289398193],
+      [-6.682403320517614, 106.84906840324403],
+      [-6.683511537958924, 106.84919714927675],
+      [-6.68415089303252, 106.8489181995392],
+      [-6.685855835807597, 106.84698700904848],
+      [-6.686505843674788, 106.84640765190126],
+      [-6.688700945820073, 106.84588193893433],
+      [-6.69015013406473, 106.84553861618042],
+      [-6.6907468573864275, 106.84515237808228],
+      [-6.691801777189287, 106.842041015625],
+      [-6.692206695296274, 106.8415689468384],
+      [-6.692835383270712, 106.84100031852722],
+      [-6.6933042347924925, 106.83990597724916],
+      [-6.693421447602584, 106.83835029602052],
+      [-6.693272267657572, 106.83663368225099],
+      [-6.693282923369441, 106.83620452880861],
+      [-6.694220625103174, 106.83561444282533],
+      [-6.695477995055482, 106.8350350856781],
+      [-6.6967566730408405, 106.83428406715394],
+      [-6.6987386172962635, 106.83318972587587],
+      [-6.701317263897219, 106.83175206184389],
+      [-6.701956595655924, 106.8313229084015],
+      [-6.702649204115183, 106.82956337928773],
+      [-6.702851658709748, 106.82767510414125],
+      [-6.7028942807189456, 106.82610869407655],
+      [-6.703597543332682, 106.82429552078248],
+      [-6.70415162831376, 106.82332992553712],
+      [-6.704886855489362, 106.82237505912782],
+      [-6.705408972665223, 106.82212829589844],
+      [-6.710065380692643, 106.82252526283264],
+      [-6.711221484254458, 106.82191908359529],
+      [-6.7120845643866405, 106.82129681110382],
+      [-6.712814451946321, 106.82058870792389],
+      [-6.713389836988389, 106.82033121585847],
+      [-6.7159630784363396, 106.82012200355531],
+      [-6.720464886331551, 106.81976795196535],
+      [-6.72155170708167, 106.81996107101442],
+      [-6.722702455815939, 106.82024002075197],
+      [-6.727113634055482, 106.82060480117799],
+      [-6.7289036659745785, 106.82062625885011],
+      [-6.731716559944392, 106.82054042816164],
+      [-6.7336291054370925, 106.8215435743332],
+      [-6.734060625801409, 106.8214201927185],
+      [-6.735253964070101, 106.8208408355713],
+      [-6.736170275391351, 106.8198698759079],
+      [-6.736750960158264, 106.81856095790864],
+      [-6.737608667578907, 106.81773483753206],
+      [-6.73910032904523, 106.81649029254915],
+      [-6.740932935421688, 106.81506335735322],
+      [-6.741209956713046, 106.81469321250917],
+      [-6.741273884680886, 106.81422650814058],
+      [-6.740986208759249, 106.81163549423219],
+      [-6.741034154758036, 106.81128144264223],
+      [-6.741582869739875, 106.80961310863496],
+      [-6.742104947495419, 106.80813789367677],
+      [-6.742754880241993, 106.80480122566225],
+      [-6.7430105912476295, 106.80423796176912],
+      [-6.743250320192853, 106.80390000343324],
+      [-6.746206967431313, 106.80225849151611],
+      [-6.7480502014421475, 106.80126070976259],
+      [-6.750996164930838, 106.79986059665681],
+      [-6.75280741748806, 106.79956018924715],
+      [-6.7543949215071795, 106.79940998554231],
+      [-6.7567548591284545, 106.79914712905885],
+      [-6.757415426512772, 106.79899692535402],
+      [-6.757905524311562, 106.79903447628023],
+      [-6.759045532487003, 106.79942071437837],
+      [-6.761197690125316, 106.80037021636964],
+      [-6.761890214060024, 106.8007081747055],
+      [-6.762923671009221, 106.80181860923769],
+      [-6.763935817425096, 106.80266618728639],
+      [-6.7649106722312995, 106.8026500940323],
+      [-6.765539266090312, 106.80234968662263],
+      [-6.766295708463103, 106.80188298225403],
+      [-6.7665460799733985, 106.80164694786073],
+      [-6.7666100045935265, 106.80120170116426],
+      [-6.766364960170438, 106.79937779903413],
+      [-6.766434211867823, 106.79900765419008],
+      [-6.767835224843652, 106.79468393325807],
+      [-6.767941765588022, 106.79405093193056],
+      [-6.767968400770454, 106.79241478443147],
+      [-6.768122884799528, 106.79211974143982],
+      [-6.7697209925441335, 106.79164767265321],
+      [-6.77018976981224, 106.79177641868591],
+      [-6.7711486309878985, 106.79176568984985],
+      [-6.7735138137411965, 106.79159402847291],
+      [-6.7737535275622855, 106.79149210453035],
+      [-6.775804407606222, 106.7902582883835],
+      [-6.775958889126448, 106.79004907608032],
+      [-6.776369063957245, 106.78928196430208],
+      [-6.776747276803736, 106.78856849670412],
+      [-6.777599586356077, 106.78718447685243],
+    ]).addTo(map).bindPopup('Ruas Kabel Z');
+
+
+
+    // Adding layer to the map
+    map.addLayer(layer);
+  </script>
+</body>
+
+</html>

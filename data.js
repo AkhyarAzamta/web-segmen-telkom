@@ -9,7 +9,9 @@ window.data = [
     name: "WJO_SEGMENT_043",
     org_latLng: { lat: -6.870357, lng: 107.097689, org_site: "CAJRYS01" },
     dst_latLng: { lat: -6.844556, lng: 107.120513, dst_site: "CARCLK01" },
-    titikRawan: []
+    titikRawan: [
+      { lat: -6.844556, lng: 107.120513, description: "Rumah Sakit" }
+    ]
   },
   {
     name: "WJO_SEGMENT_053",

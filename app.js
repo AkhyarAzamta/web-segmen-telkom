@@ -4,8 +4,13 @@ let markers = [];  // Array untuk menyimpan marker
 let routes = window.data; // Ambil data dari data.js
 let selectedRoute = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+// Definisikan custom icon
+var yellowIcon = L.icon({
+    iconUrl: 'http://maps.google.com/mapfiles/ms/icons/yellow.png',
+    iconSize: [40, 40],  // Ukuran icon
+});
 
+document.addEventListener('DOMContentLoaded', () => {
   // Inisialisasi peta
   map = L.map('map').setView([-6.914744, 107.609810], 10);
 
@@ -93,14 +98,14 @@ function updateMapWithRoute(route) {
   }).addTo(map);
 
   // Tambahkan marker untuk start, end, dan waypoints, lalu simpan di array markers
-  const startMarker = L.marker([route.org_latLng.lat, route.org_latLng.lng]).addTo(map).bindPopup(route.org_latLng.org_site);
+  const startMarker = L.marker([route.org_latLng.lat, route.org_latLng.lng], { icon: yellowIcon }).addTo(map).bindPopup(route.org_latLng.org_site);
   markers.push(startMarker);
 
-  const endMarker = L.marker([route.dst_latLng.lat, route.dst_latLng.lng]).addTo(map).bindPopup(route.dst_latLng.dst_site);
+  const endMarker = L.marker([route.dst_latLng.lat, route.dst_latLng.lng], { icon: yellowIcon }).addTo(map).bindPopup(route.dst_latLng.dst_site);
   markers.push(endMarker);
 
   route.titikRawan.forEach(({ lat, lng, description }) => {
-    const waypointMarker = L.marker([lat, lng]).addTo(map).bindPopup(`Description: ${description}`);
+    const waypointMarker = L.marker([lat, lng], { icon: yellowIcon }).addTo(map).bindPopup(`Description: ${description}`);
     markers.push(waypointMarker);
   });
 }
