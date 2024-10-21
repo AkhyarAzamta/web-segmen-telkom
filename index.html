@@ -1,38 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BBS</title>
     <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css">
+
+
     <style>
-        #map {
-            height: 90vh;
-            width: 100%;
-        }
-        body {
-            overflow-x: hidden;
-        }
-        .controls {
-            position: absolute;
-            z-index: 1000;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            justify-content: right;
-            width: -webkit-fill-available;
-        }
-
-        .controls select,
-        .controls button {
-            margin-right: 10px;
-            padding: 5px;
-        }
-
+          body {
+   		 font-size: 12px; /* Mengubah ukuran font secara global */
+		  }
         /* Fixed header */
         .navbar {
             position: fixed;
@@ -40,64 +22,59 @@
             width: 100%;
             z-index: 1030;
         }
-
         /* Left sidebar height adjust */
         .sidebar {
             position: fixed;
-            top: 56px;
-            /* Height of navbar */
+            top: 56px; /* Height of navbar */
             bottom: 0;
             left: 0;
-            width: 200px;
-            z-index: 1020;
+            width: 0%;
+            z-index: 100;
             padding-top: 20px;
             background-color: #f8f9fa;
             overflow-y: auto;
         }
-
         /* Main content area */
         .content {
-            margin-top: 56px;
-            /* Offset for the fixed header */
-            margin-left: 200px;
-            /* Offset for the sidebar */
+            margin-top: 56px; /* Offset for the fixed header */
+/*            margin-left: 5%; /* Offset for the sidebar */
             padding: 20px;
         }
-
         /* Map height */
         #map {
             height: 300px;
-            background-color: #e9ecef;
-            /* Placeholder background */
+            background-color: #e9ecef; /* Placeholder background */
         }
+
+
+        img.leaflet-marker-icon {
+            width: 40px !important;  /* Larger icons for touch screens */
+            height: 40px !important;
+        }
+
+        
     </style>
 </head>
-
 <body>
     <!-- Fixed Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand">Peta Jaringan</a>
+            <a class="navbar-brand" >Peta Jaringan</a>
         </div>
     </nav>
 
     <!-- Left Sidebar Menu -->
-    <nav class="sidebar">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Dashboard</a>
-            </li>
-        </ul>
-    </nav>
+   
+
     <!-- Main content -->
     <div class="content">
         <div class="row">
             <!-- First content block for map (locked section) -->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4" >
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Map Section</h5>
-                        <!-- Controls -->
+                        <h5 class="card-title">Peta Rute</h5>
+                       <!-- Controls -->
                         <div class="controls">
                             <select id="routeSelector">
                                 <option value="">Pilih Segment</option>
@@ -107,25 +84,24 @@
                         <!--  -->
                         <div id="map">
                             <!-- Placeholder for Map -->
-                            Map will be displayed here.
+
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4" >
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Keterangan Peta</h5>
-
-
-                        <table class="table table-striped">
+                        <div id="map">
+                                                <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Jenis</th>
-                                    <th>Jml</th>
+                                    <th>Jumlah</th>
                                     <th>Open</th>
                                     <th>Verified</th>
-
+                            
                                 </tr>
                             </thead>
                             <tbody>
@@ -146,80 +122,103 @@
 
                             </tbody>
                         </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="card">
+
+            <!-- Second content block for table -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Data Titik Rawan</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Koord</th>
+                                    <th>Jenis</th>
+                                    <th>Prior</th>
+                                    <th>Jarak</th>                                    
+                                    <th>Desain QE</th>                                    
+                                    <th>Usulan</th>                                                                    
+                                    <th>Progres</th>   
+                                    </tr>              
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>John Doe</td>
+                                    <td>25</td>
+                                    <td>25</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>                                    
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jane Smith</td>
+                                    <td>30</td>
+                                    <td>30</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>43</td>
+                                    <td>Mike Johnson</td>
+                                    <td>12</td>
+                                    <td>65</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>John Doe</td>
+                                    <td>25</td>
+                                    <td>New York</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Jane Smith</td>
+                                    <td>30</td>
+                                    <td>30</td>
+                                    <td>Los Angeles</td>
+                                    <td></td>                                    
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Mike Johnson</td>
+                                    <td>35</td>
+                                    <td>Chicago</td>
+                                    <td></td>                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>                                    
+
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-
-        <!-- Second content block for table -->
-        <div class="col-md-12">
-            <div class="card content">
-                <div class="card-body">
-                    <h5 class="card-title">Data Titik Rawan</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Koord</th>
-                                <th>Jenis</th>
-                                <th>Level</th>
-                                <th>Jarak</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>John Doe</td>
-                                <td>25</td>
-                                <td>25</td>
-                                <td>New York</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jane Smith</td>
-                                <td>30</td>
-                                <td>30</td>
-
-                                <td>Los Angeles</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Mike Johnson</td>
-                                <td>35</td>
-                                <td>30</td>
-
-                                <td>Chicago</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>John Doe</td>
-                                <td>25</td>
-                                <td>New York</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jane Smith</td>
-                                <td>30</td>
-                                <td>30</td>
-
-                                <td>Los Angeles</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Mike Johnson</td>
-                                <td>35</td>
-                                <td>Chicago</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <footer class="bg-info text-white text-center py-3 content">
+   <footer class="bg-info text-white text-center py-3">
         <div class="container">
             <p>&copy; TELKOM AKSES Bandung Barat & Sukabumi.</p>
             <p>Contact us at: <a href="mailto:info@mywebsite.com" class="text-white">info@mywebsite.com</a></p>
@@ -227,10 +226,9 @@
     </footer>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="data.js"></script>
-    <script src="app2.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
